@@ -82,7 +82,10 @@ def main():
             print("Walking forward ~2 meters while moving arm…")
 
             init_base_cmd = RobotCommandBuilder.synchro_velocity_command(
-                v_x=0.25, v_y=0.0, v_rot=0.0, frame_name=BODY_FRAME_NAME
+                v_x=0.5, v_y=0.0, v_rot=0.0, body_height= -0.25, frame_name=BODY_FRAME_NAME
+            )
+            second_base_cmd = RobotCommandBuilder.synchro_velocity_command(
+                v_x=0.5, v_y=0.0, v_rot=0.0, body_height= 0.25, frame_name=BODY_FRAME_NAME
             )
 
             # Arm points LEFT (yaw=+90°)
@@ -94,43 +97,49 @@ def main():
             qz = math.sin(half)
 
             init_arm_cmd = RobotCommandBuilder.arm_pose_command(
-                x=1, y=0.0, z=0.25,
+                x=0.5, y=0.5, z=0.215,
                 qw=qw, qx=qx, qy=qy, qz=qz,
                 frame_name=BODY_FRAME_NAME,
             )
+            
             init_synchro_cmd = RobotCommandBuilder.build_synchro_command(init_base_cmd, init_arm_cmd)
 
             # Send without a deadline so the velocity holds until we stop it.
-            send_with_deadline(robot, command_client, init_synchro_cmd, duration_s=4.0)
+            #send_with_deadline(robot, command_client, init_synchro_cmd, duration_s=4.0)
+            send_with_deadline(robot, command_client, init_base_cmd, duration_s=4.0)
             time.sleep(4.0)
+            send_with_deadline(robot, command_client, second_base_cmd, duration_s=4.0)
+            time.sleep(4.0)
+            # send_with_deadline(robot, command_client, init_base_cmd, duration_s=4.0)
+
 
             print("command2")
 
-            # Spot rotates left 90° over ~2 seconds
-            base_cmd = RobotCommandBuilder.synchro_velocity_command(
-                v_x=0.0, v_y=0.0, v_rot=0.79, frame_name=BODY_FRAME_NAME
-            )
+            # # Spot rotates left 90° over ~2 seconds
+            # base_cmd = RobotCommandBuilder.synchro_velocity_command(
+            #     v_x=0.0, v_y=0.0, v_rot=0.79, frame_name=BODY_FRAME_NAME
+            # )
 
-            # Arm straight forward
-            arm_cmd = RobotCommandBuilder.arm_cartesian_command(
-                x=1.5, y=0.0, z=1.0,
-                qw=1.0, qx=0.0, qy=0.0, qz=0.0,
-                frame_name=BODY_FRAME_NAME,
-                max_linear_velocity=2.0,          # m/s  (default ~0.5)
-                max_angular_velocity=4.0          # rad/s (default ~1.0)
-            )
+            # # Arm straight forward
+            # arm_cmd = RobotCommandBuilder.arm_cartesian_command(
+            #     x=1.5, y=0.0, z=1.0,
+            #     qw=1.0, qx=0.0, qy=0.0, qz=0.0,
+            #     frame_name=BODY_FRAME_NAME,
+            #     max_linear_velocity=2.0,          # m/s  (default ~0.5)
+            #     max_angular_velocity=4.0          # rad/s (default ~1.0)
+            # )
 
 
-            synchro_cmd = RobotCommandBuilder.build_synchro_command(base_cmd, arm_cmd)
+            # synchro_cmd = RobotCommandBuilder.build_synchro_command(base_cmd, arm_cmd)
 
-            # Send without a deadline so the velocity holds until we stop it.
-            send_with_deadline(robot, command_client, synchro_cmd, duration_s=2.0)
-            time.sleep(4.0)
+            # # Send without a deadline so the velocity holds until we stop it.
+            # send_with_deadline(robot, command_client, synchro_cmd, duration_s=2.0)
+            # time.sleep(4.0)
 
-            print("Stopping…")
-            stop_cmd = RobotCommandBuilder.synchro_stop_command()
-            send_with_deadline(robot, command_client, stop_cmd, duration_s=2.0)
-            time.sleep(0.5)
+            # print("Stopping…")
+            # stop_cmd = RobotCommandBuilder.synchro_stop_command()
+            # send_with_deadline(robot, command_client, stop_cmd, duration_s=2.0)
+            # time.sleep(0.5)
 
 
         finally:
