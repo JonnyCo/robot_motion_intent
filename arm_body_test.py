@@ -106,10 +106,10 @@ def main():
 
             # Send without a deadline so the velocity holds until we stop it.
             #send_with_deadline(robot, command_client, init_synchro_cmd, duration_s=4.0)
-            send_with_deadline(robot, command_client, init_base_cmd, duration_s=4.0)
-            time.sleep(4.0)
-            send_with_deadline(robot, command_client, second_base_cmd, duration_s=4.0)
-            time.sleep(4.0)
+            send_with_deadline(robot, command_client, second_base_cmd, duration_s=5.0)
+            time.sleep(5.0)
+            send_with_deadline(robot, command_client, init_base_cmd, duration_s=5.0)
+            time.sleep(5.0)
             # send_with_deadline(robot, command_client, init_base_cmd, duration_s=4.0)
 
 
